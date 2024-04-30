@@ -7,10 +7,14 @@ class Materia: # Agregar test para todos los métodos incluyendo el constructor
         self.__alumnos__ = alumnos
     def obtener_profesores(self):
         return self.__profesores__
-    def obtener_alumnos(self):
-        return self.__alumnos__
+    def obtener_alumnos(self): #Obtiene el nombre de una clase Alumno
+        lista_alumnos = []
+        for estu in self.__alumnos__: 
+            lista_alumnos.append(estu.__nombre__)
+        return lista_alumnos
     def cambiar_nombre(self, nombre:str):
-        self.__nombre__ = nombre
+        self.__nombre__ = nombre 
+
 class Profesor: #Agregar tests para todos los métodos, incluyendo el constructor
     def __init__(self, nombre, cargo, legajo):
         self.__nombre__ = nombre
@@ -30,14 +34,24 @@ class Alumno:
         self.__puntos__ = puntos
         
 
+class TestClaseAlumnos(unittest.TestCase):
+    def setUp(self) -> None:
+        self.alumno = Alumno('Franco','Ing Inf', 45)
+    
+    def testinit(self):
+        self.assertEqual(self.alumno.__nombre__, 'Franco')
+        self.assertEqual(self.alumno.__carrera__, 'Ing Inf')
+        self.assertEqual(self.alumno.__puntos__, 45)
+
 class TestclaseMateria(unittest.TestCase):
     def setUp(self):
-        self.computacion = Materia('Computación', ['Elio', 'Walter', 'Daniel', 'Gabriel'], ['Franco','Lucas', 'Nehuen'])
+        self.alumnado = [Alumno('Franco','Ing Inf', 45), Alumno('Lucas','Ing Inf', 33),Alumno('Nehuen','Ing Inf', 40)]
+        self.computacion = Materia('Computación', ['Elio', 'Walter', 'Daniel', 'Gabriel'], self.alumnado)
         #computacion = Materia('Computación', ['Elio', 'Walter', 'Daniel', 'Gabriel'])
     def testinit(self):
         self.assertEqual(self.computacion.__nombre__, 'Computación')
         self.assertEqual(self.computacion.__profesores__, ['Elio', 'Walter', 'Daniel', 'Gabriel'])
-        self.assertEqual(self.computacion.__alumnos__, ['Franco','Lucas', 'Nehuen'])
+        self.assertEqual(self.computacion.__alumnos__, self.alumnado) #Test que comprueba la lista de clases de alumnos(self.alumnado)
 
     def testobtenerprofesores(self):
         self.assertEqual(self.computacion.obtener_profesores(), ['Elio', 'Walter', 'Daniel', 'Gabriel'])
@@ -48,6 +62,7 @@ class TestclaseMateria(unittest.TestCase):
 
     def testobteneralumnos(self):
         self.assertEqual(self.computacion.obtener_alumnos(), ['Franco','Lucas', 'Nehuen'])
+
 class TestClaseProfesor(unittest.TestCase):
     def setUp(self):
         self.profepablo = Profesor('Pablo Gómez', 'Profesor', '121214')
@@ -65,5 +80,6 @@ class TestClaseProfesor(unittest.TestCase):
     
     def testobtenerlegajo(self):
         self.assertEqual(self.profepablo.obtener_legajo(), '121214')
-    
+
+
 unittest.main()
